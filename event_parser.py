@@ -9,7 +9,7 @@ def get_pipeline_metadata(event):
     pipeline_name = detail['pipeline']
     return pipeline_execution_id, pipeline_name
 
-
+    
 def is_pipeline_state_update(event):
     return event['detail-type'] == "CodePipeline Pipeline Execution State Change"
 

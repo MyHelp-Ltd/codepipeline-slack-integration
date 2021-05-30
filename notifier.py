@@ -30,8 +30,11 @@ def run(event, context):
         process_code_pipeline(event)
     elif event['source'] == "aws.codebuild":
         process_code_build(event)
+    elif event['source'] == "aws.codedeploy":
+        process_code_deploy(event)
     elif event['source'] == "aws.ecs":
         alarm_task(event)
+
 
 def process_code_pipeline(event):
     pipeline_execution_id, pipeline_name = get_pipeline_metadata(event)
@@ -47,6 +50,23 @@ def process_code_pipeline(event):
 
 
 def process_code_build(event):
+    pipeline_name, build_id, build_project_name = get_codebuild_from_pipeline_metadata(event)
+    stage_name, pipeline_execution_id, action_state = find_pipeline_from_build(pipeline_name, build_id)
+
+    if not pipeline_execution_id:
+        return
+
+    message = find_slack_message_for_update(pipeline_execution_id)
+    message_builder = MessageBuilder(message, pipeline_execution_id, pipeline_name)
+
+    if is_codebuild_phases_updatable(event):
+        phases = get_codebuild_phases(event)
+        message_builder.update_build_stage_info(stage_name, phases, action_state, build_project_name)
+
+    post_message(message_builder=message_builder)
+
+
+def process_code_deploy(event):
     pipeline_name, build_id, build_project_name = get_codebuild_from_pipeline_metadata(event)
     stage_name, pipeline_execution_id, action_state = find_pipeline_from_build(pipeline_name, build_id)
 

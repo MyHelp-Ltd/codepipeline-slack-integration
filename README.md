@@ -49,7 +49,7 @@ install your bot to your workspace
 
 Click your app > OAuth & Permissions
 
-Copy **OAuth Access** **Token** and **Bot User OAuth Access** **Token** and paste it to .env
+Copy **Bot User OAuth Access** **Token** and paste it to .env
 
 
 
@@ -59,12 +59,15 @@ you have to set bot's api permission scopes.
 
 Click your app > OAuth & Permissions
 
-Add Permissions
+Bot Token Scopes
 
 - channels:history
 - channels:read
-- chat:write:bot
-- chat:write:user
+- chat:write
+
+User Token Scopes
+
+- none
 
 ![image:](slack_permission.png)
 
@@ -74,8 +77,7 @@ you need to register your environment variables in .env file.
 
 - stage: your cloud stage environment. like `dev`, `prd`. This parameter insert to lambda funciton name like `codepipeline-slack-dev-notifier`
 - s3_bucket: s3 bucket name. Serverless artifacts will be uploaded to this bucket.
-- SLACK_TOKEN: Slack token. OAuth Access Token.
-- SLACK_BOT_TOKEN:  Slack token. Bot User Oauth Access Token.
+- SLACK_BOT_TOKEN:  Bot User Oauth Access Token.
 - SLACK_CHANNEL: slack channel to send pipeline status message. defualt is `builds`
 - SLACK_BOT_NAME: your slack bot name. default is `PipelineBot`
 - SLACK_BOT_ICON: your slack bot's icon. default is `:robot_face:`

@@ -132,7 +132,7 @@ class MessageBuilder:
         if is_pipeline_state_update(event):
             self.fields[0]['value'] = get_pipeline_states(event)
 
-        if is_pipeline_stage_state_update(event):
+        if is_pipeline_stage_state_update(event):            
             current_stage = get_pipeline_stages(event)
             current_state = get_pipeline_states(event)
 
@@ -158,7 +158,7 @@ class MessageBuilder:
         external_execution_url = action_states['latestExecution']['externalExecutionUrl']
 
         if external_execution_url:
-            self.get_or_create_action(f"Dashboard:{build_project_name}", external_execution_url)
+            self.get_or_create_action(f"Dashboard: {build_project_name}", external_execution_url)
 
         build_field_name = MessageBuilder.create_codebuild_name_from_pipeline_stage(
             stage_name, build_project_name
